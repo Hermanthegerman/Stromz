@@ -25,21 +25,22 @@ class SML_Message():
             pass
         if data.popleft()['Listelem'] == 6:
             try:
-                self.transID = data.popleft().values()[0]
-                self.groupNo = data.popleft().values()[0]
-                self.abortOnError = data.popleft().values()[0]
+                self.transID = list(data.popleft().values())[0]
+                self.groupNo = list(data.popleft().values())[0]
+                self.abortOnError = list(data.popleft().values())[0]
                 mess = data.popleft()
                 if 'Listelem' in mess:
-                    self.messageBody = data.popleft().values()[0]
+                    self.messageBody = list(data.popleft().values())[0]
                 else:
                     self.messageBody = mess['Wert']
                 self.MessageType = SML_MessageBody[self.messageBody]
                 if self.MessageType != "":
                     erg, data = self.parseMsg(data, self.MessageType)
                     if erg == True:
-                        self.crc16 = data.popleft().values()[0]
+                        self.crc16 = list(data.popleft().values())
+                        self.crc16 = self.crc16[0]
                         try:
-                            if data.popleft().values()[0] == 0:
+                            if list(data.popleft().values())[0] == 0:
                                 self.eom = 1
                         except Exception as e:
                             print(e)
